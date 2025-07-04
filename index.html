@@ -292,14 +292,22 @@ onSnapshot(query(produitsRef), (snapshot) => {
     const { nom, prix } = docSnap.data();
     const li = document.createElement("li");
     li.textContent = `${nom} - ${prix.toFixed(2)} €`;
+const deleteBtn = document.createElement("button");
+deleteBtn.textContent = "🗑️";
+deleteBtn.style.marginLeft = "10px";
 
-    const deleteBtn = document.createElement("button");
-  deleteBtn.addEventListener("click", async () => {
+deleteBtn.addEventListener("click", async () => {
   li.classList.add("gloop-out");
+
   setTimeout(async () => {
+    const glop = document.getElementById("glopSound");
+    if (glop) glop.play();
+
     await deleteDoc(doc(db, "produits", docSnap.id));
-  }, 400); // attendre l'animation
+  }, 400); // Durée de l'animation avant suppression
 });
+
+
 
     li.appendChild(deleteBtn);
     list.appendChild(li);
@@ -332,8 +340,8 @@ window.startScanner = function () {
           document.getElementById("productName").value = decodedText;
         })
       .finally(() => {
-  const beep = document.getElementById("beepSound");
-  if (beep) beep.play();
+ const glop = document.getElementById("glopSound");
+if (glop) glop.play();
 
   html5QrCode.stop().then(() => {
     document.getElementById("reader").innerHTML = "";
